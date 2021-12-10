@@ -20,14 +20,14 @@ io.on('connection', socket => {
 
     const user = userJoin(socket.id, username, room);
     socket.join(user.room);
-    socket.emit('message', formatMessage(botName, 'Welcome to BK Zalo!'));
+    socket.emit('message', formatMessage(botName, 'Welcome to BK Zalo!','css/img/bot.png'));
     socket.broadcast.to(user.room).emit('message',formatMessage(botName, `${user.username} has joined the chat`));
     io.to(user.room).emit('roomUsers', {room: user.room,users: getRoomUsers(user.room)});
   });
 
-  socket.on('chatMessage', msg => {
+  socket.on('chatMessage', (msg,file_input) => {
     const user = getCurrentUser(socket.id);
-    io.to(user.room).emit('message', formatMessage(user.username, msg));
+    io.to(user.room).emit('message', formatMessage(user.username, msg,'css/img/user.png',file_input));
   });
 
   socket.on('disconnect', () => {

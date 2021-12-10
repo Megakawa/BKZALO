@@ -10,7 +10,6 @@ socket.emit('joinRoom', { username, room });
 socket.on('roomUsers', ({ room, users }) => {outputRoomName(room);outputUsers(users);});
 
 socket.on('message', (message) => {
-  // console.log(message);
   outputMessage(message);
   chatMessages.scrollTop = chatMessages.scrollHeight;
 });
@@ -18,27 +17,44 @@ socket.on('message', (message) => {
 chatForm.addEventListener('submit', (e) => {
   e.preventDefault();
   let msg = e.target.elements.msg.value;
+  let file_input = e.target.elements.file_input.value;
   msg = msg.trim();
-  if (!msg) {
+  file_input = file_input.trim();
+  if (!msg&!file_input) {
     return false;
   }
-  socket.emit('chatMessage', msg);
+  socket.emit('chatMessage', msg, file_input);
   e.target.elements.msg.value = '';
+  e.target.elements.file_input.value = '';
   e.target.elements.msg.focus();
+  e.target.elements.file_input.focus();
+
 });
 
 function outputMessage(message) {
   const div = document.createElement('div');
   div.classList.add('message');
-  const p = document.createElement('p');
-  p.classList.add('meta');
-  p.innerText = message.username;
+  const p = document.createElement('div');
+  p.classList.add('meta')
+  if (message.file!=null){
+    p.innerHTML += `<img src='${message.file}' style="width: 25px;"></img>`;
+  }
+  p.innerHTML += `<span style="color: blue;"> ${message.username}</span>`;
   p.innerHTML += `<span> ${message.time}</span>`;
   div.appendChild(p);
-  const para = document.createElement('p');
+  const para = document.createElement('text');
   para.classList.add('text');
   para.innerText = message.text;
   div.appendChild(para);
+  const div2 = document.createElement('div');
+  const img = document.createElement('img');
+  if (message.file2!=null&&message.file2!==''){
+    img.src=document.querySelector('.iv').src;
+    img.style.cssText='width:200px';
+    document.querySelector('.iv').src=null;
+  }
+  div2.appendChild(img);
+  div.appendChild(div2);
   document.querySelector('.chat-messages').appendChild(div);
 }
 
@@ -62,3 +78,16 @@ document.getElementById('leave-btn').addEventListener('click', () => {
   } else {
   }
 });
+function previewFile() {
+  const preview = document.querySelector('.iv');
+  const file = document.querySelector('input[type=file]').files[0];
+  const reader = new FileReader();
+
+  reader.addEventListener("load", function () {
+    preview.src = reader.result;
+  }, false);
+
+  if (file) {
+    reader.readAsDataURL(file);
+  }
+}

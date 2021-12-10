@@ -36,10 +36,17 @@
             required
             autocomplete="off"
           />
-          <button class="btnAttactment"><i class="fa fa-paperclip" style="color: black;"></i></button>
-          <button class="btnCamera"><i class="fa fa-camera" style="color: black;"></i></button>
+          <div class="image-upload">
+            <label for="file_input">
+              <img src="https://www.mcicon.com/wp-content/uploads/2021/02/Technology_Camera_1-copy-18.jpg" style="width: 40px;"/>
+            </label>
+          
+            <input id="file_input" type="file" style="display: none;" accept=".jpg, .jpeg, .png" onchange="previewFile()"/>
+          </div>
           <button class="btn"><i class="fas fa-paper-plane" style="color: black;"></i> </button>
         </form>
+        <img class="iv" src="" height="100">
+
       </div>
     </div>
 
