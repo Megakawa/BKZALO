@@ -23,7 +23,7 @@ chatForm.addEventListener('submit', (e) => {
   if (!msg&!file_input) {
     return false;
   }
-  socket.emit('chatMessage', msg, file_input);
+  socket.emit('chatMessage', msg, document.querySelector('.iv').src);
   e.target.elements.msg.value = '';
   e.target.elements.file_input.value = '';
   e.target.elements.msg.focus();
@@ -48,13 +48,14 @@ function outputMessage(message) {
   div.appendChild(para);
   const div2 = document.createElement('div');
   const img = document.createElement('img');
-  if (message.file2!=null&&message.file2!==''){
-    img.src=document.querySelector('.iv').src;
+  if (message.file2!=null&&!message.file2.includes('http')){
+    img.src=message.file2;
     img.style.cssText='width:200px';
-    document.querySelector('.iv').src=null;
+    div2.appendChild(img);
+    div.appendChild(div2);
   }
-  div2.appendChild(img);
-  div.appendChild(div2);
+  document.querySelector('.iv').src="#";
+  document.querySelector('.iv').style="visibility: hidden;";
   document.querySelector('.chat-messages').appendChild(div);
 }
 
@@ -90,4 +91,5 @@ function previewFile() {
   if (file) {
     reader.readAsDataURL(file);
   }
+  document.querySelector('.iv').style="visibility: visible; width:200px;";
 }

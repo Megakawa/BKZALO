@@ -21,7 +21,7 @@ io.on('connection', socket => {
     const user = userJoin(socket.id, username, room);
     socket.join(user.room);
     socket.emit('message', formatMessage(botName, 'Welcome to BK Zalo!','css/img/bot.png'));
-    socket.broadcast.to(user.room).emit('message',formatMessage(botName, `${user.username} has joined the chat`));
+    socket.broadcast.to(user.room).emit('message',formatMessage(botName, `${user.username} has joined the chat`,'css/img/bot.png'));
     io.to(user.room).emit('roomUsers', {room: user.room,users: getRoomUsers(user.room)});
   });
 
@@ -33,7 +33,7 @@ io.on('connection', socket => {
   socket.on('disconnect', () => {
     const user = userLeave(socket.id);
     if (user) {
-      io.to(user.room).emit('message',formatMessage(botName, `${user.username} has left the chat`));
+      io.to(user.room).emit('message',formatMessage(botName, `${user.username} has left the chat`,'css/img/bot.png'));
       io.to(user.room).emit('roomUsers', {room: user.room,users: getRoomUsers(user.room)});
     }
   });
